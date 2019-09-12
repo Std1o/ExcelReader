@@ -5,8 +5,12 @@ package com.stdio.excelreader.models;
  */
 public class Item {
 
-    private final String name;
-    private final int id;
+    private String name;
+    private int id;
+
+    public Item() {
+
+    }
 
     public Item(String name, int id) {
         this.name = name;
