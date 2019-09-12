@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "242510232026",
+    "firebase_url": "https://excelreader-5883a.firebaseio.com",
+    "project_id": "excelreader-5883a",
+    "storage_bucket": "excelreader-5883a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242510232026:android:4c5af57ecee520aad968e3",
+        "android_client_info": {
+          "package_name": "com.stdio.excelreader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "242510232026-4k9s2hnlk6gaaljvfn0g86mt226av1b8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABk7S9JwUD_hFFNB0Y6N01iE9v2wj0er8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "242510232026-4k9s2hnlk6gaaljvfn0g86mt226av1b8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
