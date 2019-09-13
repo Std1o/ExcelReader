@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.stdio.excelreader.models.DataModel;
 import com.stdio.excelreader.models.Item;
 
 import java.util.ArrayList;
@@ -67,6 +68,12 @@ public class SectionedExpandableLayoutHelper implements SectionStateChangeListen
     public void removeSection(String section) {
         mSectionDataMap.remove(mSectionMap.get(section));
         mSectionMap.remove(section);
+    }
+
+    public void clear() {
+        mSectionDataMap.clear();
+        mDataArrayList.clear();
+        mSectionMap.clear();
     }
 
     private void generateDataList () {

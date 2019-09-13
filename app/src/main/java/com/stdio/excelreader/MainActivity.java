@@ -3,8 +3,11 @@ package com.stdio.excelreader;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,13 +48,14 @@ import java.util.Iterator;
 public class MainActivity extends AppCompatActivity implements ItemClickListener {
 
     RecyclerView mRecyclerView;
-    ArrayList<DataModel> mainArrayList = new ArrayList<>();
     DialogProperties properties = new DialogProperties();
     FilePickerDialog dialog;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     SectionedExpandableLayoutHelper sectionedExpandableLayoutHelper;
+    private EditText etSearch;
+    public static ArrayList<DataModel> data = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,13 +101,48 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                     exception = true;
                 }
                 if (!exception) {
-                    mainArrayList.clear();
+                    sectionedExpandableLayoutHelper.clear();
                     myRef.removeValue();
                     xlsReader(workbook);
                 }
 
             }
         });
+        etSearch = findViewById(R.id.etSearch);
+        setSearchListener();
+    }
+
+    private void setSearchListener() {
+        etSearch.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                sectionedExpandableLayoutHelper.clear();
+                getDataForSearching();
+                sectionedExpandableLayoutHelper.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void getDataForSearching() {
+        for (int i = 0; i < data.size(); i++) {
+            if (etSearch.getText().toString().isEmpty()) {
+                sectionedExpandableLayoutHelper.addSection(data.get(i).sectionName, data.get(i).arrayList);
+            }
+            else {
+                for (int j = 0; j < data.get(i).arrayList.size(); j++) {
+                    if (data.get(i).arrayList.get(j).getName().toLowerCase().contains(etSearch.getText().toString().toLowerCase())) {
+                        sectionedExpandableLayoutHelper.addSection(data.get(i).sectionName, data.get(i).arrayList);
+                    }
+                }
+            }
+        }
     }
 
     private void xlsReader(XSSFWorkbook workbook) {
@@ -183,19 +222,15 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     }
 
     private void getData() {
-        mainArrayList = new ArrayList();
 
         Query myQuery = myRef;
         myQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 DataModel item = dataSnapshot.getValue(DataModel.class);
-                sectionedExpandableLayoutHelper.addSection(item.sectionName,item.arrayList);
                 if (item.arrayList != null && item.arrayList.size() != 0) {
-                    for (int i = 0; i < item.arrayList.size(); i++) {
-                        System.out.println(item.arrayList.get(i).getName());
-                    }
-                    System.out.println("AAA" + item.arrayList.get(0).getName());
+                    sectionedExpandableLayoutHelper.addSection(item.sectionName,item.arrayList);
+                    data.add(new DataModel(item.sectionName,item.arrayList));
                     sectionedExpandableLayoutHelper.notifyDataSetChanged();
                 }
             }
