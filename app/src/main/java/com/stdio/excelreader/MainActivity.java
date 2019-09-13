@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         setFilePickerProperties();
         dialog = new FilePickerDialog(MainActivity.this,properties);
-        dialog.setTitle("Выберите xls документ");
+        dialog.setTitle("Выберите xlsx документ");
         dialog.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
             public void onSelectedFilePaths(String[] files) {
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 }
                 if (!exception) {
                     sectionedExpandableLayoutHelper.clear();
+                    data.clear();
                     myRef.removeValue();
                     xlsReader(workbook);
                 }
