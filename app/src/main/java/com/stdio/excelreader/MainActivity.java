@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     SectionedExpandableLayoutHelper sectionedExpandableLayoutHelper;
-    private EditText etSearch;
+    private EditText etSearch1, etSearch2;
     public static ArrayList<DataModel> data = new ArrayList<>();
 
     @Override
@@ -109,12 +109,29 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
             }
         });
-        etSearch = findViewById(R.id.etSearch);
+        etSearch1 = findViewById(R.id.etSearch1);
+        etSearch2 = findViewById(R.id.etSearch2);
         setSearchListener();
     }
 
     private void setSearchListener() {
-        etSearch.addTextChangedListener(new TextWatcher() {
+        etSearch1.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                sectionedExpandableLayoutHelper.clear();
+                getDataForSearching();
+                sectionedExpandableLayoutHelper.notifyDataSetChanged();
+            }
+        });
+
+        etSearch2.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {}
 
@@ -133,14 +150,34 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     private void getDataForSearching() {
         for (int i = 0; i < data.size(); i++) {
-            if (etSearch.getText().toString().isEmpty()) {
+            if (etSearch1.getText().toString().isEmpty() && etSearch2.getText().toString().isEmpty()) {
                 sectionedExpandableLayoutHelper.addSection(data.get(i).sectionName, data.get(i).arrayList);
             }
-            else {
+            else if (etSearch1.getText().toString().isEmpty()) {
+                Toast.makeText(this, "Основное поле ввода не должно быть пустым", Toast.LENGTH_SHORT).show();
+            }
+            else if (etSearch2.getText().toString().isEmpty()) {
                 for (int j = 0; j < data.get(i).arrayList.size(); j++) {
-                    if (data.get(i).arrayList.get(j).getName().toLowerCase().contains(etSearch.getText().toString().toLowerCase())) {
+                    if (data.get(i).arrayList.get(j).getName().toLowerCase().contains(etSearch1.getText().toString().toLowerCase())) {
                         sectionedExpandableLayoutHelper.addSection(data.get(i).sectionName, data.get(i).arrayList);
                     }
+                }
+            }
+            else {
+                boolean isContains1 = false;
+                boolean isContains2 = false;
+                for (int j = 0; j < data.get(i).arrayList.size(); j++) {
+                    if (data.get(i).arrayList.get(j).getName().toLowerCase().contains(etSearch1.getText().toString().toLowerCase())) {
+                        isContains1 = true;
+                    }
+                }
+                for (int j = 0; j < data.get(i).arrayList.size(); j++) {
+                    if (data.get(i).arrayList.get(j).getName().toLowerCase().contains(etSearch2.getText().toString().toLowerCase())) {
+                        isContains2 = true;
+                    }
+                }
+                if (isContains1 && isContains2) {
+                    sectionedExpandableLayoutHelper.addSection(data.get(i).sectionName, data.get(i).arrayList);
                 }
             }
         }
