@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         //setting the recycler view
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         sectionedExpandableLayoutHelper = new SectionedExpandableLayoutHelper(this,
-                mRecyclerView, this, 3);
+                mRecyclerView, this, 1);
 
         database= FirebaseDatabase.getInstance();
         try {
